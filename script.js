@@ -32,7 +32,7 @@ function buyMultitap() {
     if (points >= multitapCost) {
         points -= multitapCost;
         multitapLevel++;
-        multitapCost = Math.ceil(multitapCost * 1.5); // Increase cost by 50%
+        multitapCost = Math.ceil(multitapCost * 2); // Increase cost by 50%
         document.getElementById("points").innerText = "ZT Coins: " + points;
         updateMultitapDisplay();
         saveGame(); // Save game after buying upgrade
