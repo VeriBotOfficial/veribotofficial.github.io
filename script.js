@@ -32,7 +32,7 @@ function buyMultitap() {
     if (points >= multitapCost) {
         points -= multitapCost;
         multitapLevel++;
-        multitapCost = Math.ceil(multitapCost * 2); // Increase cost by 50%
+        multitapCost = Math.ceil(multitapCost * 1.5); // Increase cost by 50%
         document.getElementById("points").innerText = "ZT Coins: " + points;
         updateMultitapDisplay();
         saveGame(); // Save game after buying upgrade
@@ -43,7 +43,7 @@ function buyMultitap() {
 
 // Function to update multitap display
 function updateMultitapDisplay() {
-    document.getElementById("multitap").innerText = "Multitap: " + multitapLevel + " (Cost: " + savedMultitapCost + ")";
+    document.getElementById("multitap").innerText = "Multitap: " + multitapLevel + " (Cost: " + multitapCost + ")";
 }
 
 // Function to save game using local storage
@@ -51,4 +51,5 @@ function saveGame() {
     localStorage.setItem("points", points);
     localStorage.setItem("multitapLevel", multitapLevel);
     localStorage.setItem("multitapCost", multitapCost);
+    updateMultitapDisplay(); // Update the display after saving to ensure the correct cost is shown
 }
