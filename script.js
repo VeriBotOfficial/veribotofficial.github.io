@@ -1,11 +1,18 @@
 let points = 0;
+let multitapLevel = 0;
+let multitapCost = 50;
 
-// Load saved points from local storage
+// Load saved points and multitap level from local storage
 window.onload = function() {
     let savedPoints = localStorage.getItem("points");
+    let savedMultitapLevel = localStorage.getItem("multitapLevel");
     if (savedPoints) {
         points = parseInt(savedPoints);
         document.getElementById("points").innerText = "Points: " + points;
+    }
+    if (savedMultitapLevel) {
+        multitapLevel = parseInt(savedMultitapLevel);
+        updateMultitapDisplay();
     }
 }
 
@@ -16,7 +23,27 @@ function clickCookie() {
     saveGame(); // Save game after each click
 }
 
+// Function to buy multitap upgrade
+function buyMultitap() {
+    if (points >= multitapCost) {
+        points -= multitapCost;
+        multitapLevel++;
+        multitapCost = Math.ceil(multitapCost * 1.5); // Increase cost by 50%
+        document.getElementById("points").innerText = "Points: " + points;
+        updateMultitapDisplay();
+        saveGame(); // Save game after buying upgrade
+    } else {
+        alert("Not enough points to buy Multitap!");
+    }
+}
+
+// Function to update multitap display
+function updateMultitapDisplay() {
+    document.getElementById("multitap").innerText = "Multitap: " + multitapLevel + " (Cost: " + multitapCost + ")";
+}
+
 // Function to save game using local storage
 function saveGame() {
     localStorage.setItem("points", points);
+    localStorage.setItem("multitapLevel", multitapLevel);
 }
