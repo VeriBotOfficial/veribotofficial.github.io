@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookie Clicker Game</title>
@@ -10,13 +9,9 @@
 <body>
     <div class="container">
         <h1>Cookie Clicker</h1>
-        <img id="cookie-img" src="cookie.png" alt="Cookie" width="200">
-        <p>Click the cookie to earn points!</p>
-        <button id="cookie">Click Me!</button>
+        <img id="cookie-img" src="cookie.png" alt="Cookie" width="200" onclick="clickCookie()">
         <p id="points">Points: 0</p>
-        <button id="save">Save Game</button>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
