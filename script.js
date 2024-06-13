@@ -8,7 +8,7 @@ window.onload = function() {
     let savedMultitapLevel = localStorage.getItem("multitapLevel");
     if (savedPoints) {
         points = parseInt(savedPoints);
-        document.getElementById("points").innerText = "Points: " + points;
+        document.getElementById("points").innerText = "ZT Coins: " + points;
     }
     if (savedMultitapLevel) {
         multitapLevel = parseInt(savedMultitapLevel);
