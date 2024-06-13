@@ -43,7 +43,7 @@ function buyMultitap() {
 
 // Function to update multitap display
 function updateMultitapDisplay() {
-    document.getElementById("multitap").innerText = "Multitap: " + multitapLevel + " (Cost: " + multitapCost + ")";
+    document.getElementById("multitap").innerText = "Multitap: " + multitapLevel + " (Cost: " + savedMultitapCost + ")";
 }
 
 // Function to save game using local storage
