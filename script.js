@@ -17,6 +17,7 @@ window.onload = function() {
     }
     if (savedMultitapCost) {
         multitapCost = parseInt(savedMultitapCost);
+        updateMultitapDisplay(); // Update the display immediately after loading the cost
     }
 }
 
