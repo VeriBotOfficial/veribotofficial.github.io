@@ -1,6 +1,6 @@
 let points = 0;
 let multitapLevel = 0;
-let multitapCost = 50;
+let multitapCost = 10;
 
 // Load saved points and multitap level from local storage
 window.onload = function() {
