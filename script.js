@@ -2,10 +2,11 @@ let points = 0;
 let multitapLevel = 0;
 let multitapCost = 50;
 
-// Load saved points and multitap level from local storage
+// Load saved points, multitap level, and multitap cost from local storage
 window.onload = function() {
     let savedPoints = localStorage.getItem("points");
     let savedMultitapLevel = localStorage.getItem("multitapLevel");
+    let savedMultitapCost = localStorage.getItem("multitapCost");
     if (savedPoints) {
         points = parseInt(savedPoints);
         document.getElementById("points").innerText = "ZT Coins: " + points;
@@ -13,6 +14,9 @@ window.onload = function() {
     if (savedMultitapLevel) {
         multitapLevel = parseInt(savedMultitapLevel);
         updateMultitapDisplay();
+    }
+    if (savedMultitapCost) {
+        multitapCost = parseInt(savedMultitapCost);
     }
 }
 
@@ -28,7 +32,7 @@ function buyMultitap() {
     if (points >= multitapCost) {
         points -= multitapCost;
         multitapLevel++;
-        multitapCost = Math.ceil(multitapCost * 2); // Increase cost by 100%
+        multitapCost = Math.ceil(multitapCost * 1.5); // Increase cost by 50%
         document.getElementById("points").innerText = "ZT Coins: " + points;
         updateMultitapDisplay();
         saveGame(); // Save game after buying upgrade
@@ -46,4 +50,5 @@ function updateMultitapDisplay() {
 function saveGame() {
     localStorage.setItem("points", points);
     localStorage.setItem("multitapLevel", multitapLevel);
+    localStorage.setItem("multitapCost", multitapCost);
 }
