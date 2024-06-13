@@ -9,15 +9,17 @@ window.onload = function() {
     }
 }
 
-document.getElementById("cookie").addEventListener("click", function() {
+// Function to handle cookie click
+function clickCookie() {
     points++;
     document.getElementById("points").innerText = "Points: " + points;
-});
+    saveGame(); // Save game after each click
+}
 
-document.getElementById("save").addEventListener("click", function() {
+// Function to save game
+function saveGame() {
     setCookie("points", points, 365);
-    alert("Game saved!");
-});
+}
 
 // Function to set cookie
 function setCookie(name, value, days) {
