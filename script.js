@@ -1,6 +1,6 @@
 let points = 0;
 let multitapLevel = 0;
-let multitapCost = 10;
+let multitapCost = 50;
 
 // Load saved points and multitap level from local storage
 window.onload = function() {
@@ -18,8 +18,8 @@ window.onload = function() {
 
 // Function to handle cookie click
 function clickCookie() {
-    points++;
-    document.getElementById("points").innerText = "Points: " + points;
+    points += (1 + multitapLevel); // Increment points based on multitap level
+    document.getElementById("points").innerText = "ZT Coins: " + points;
     saveGame(); // Save game after each click
 }
 
@@ -28,12 +28,12 @@ function buyMultitap() {
     if (points >= multitapCost) {
         points -= multitapCost;
         multitapLevel++;
-        multitapCost = Math.ceil(multitapCost * 1.5); // Increase cost by 50%
-        document.getElementById("points").innerText = "Points: " + points;
+        multitapCost = Math.ceil(multitapCost * 2); // Increase cost by 100%
+        document.getElementById("points").innerText = "ZT Coins: " + points;
         updateMultitapDisplay();
         saveGame(); // Save game after buying upgrade
     } else {
-        alert("Not enough points to buy Multitap!");
+        alert("Not enough ZT Coins to buy Multitap!");
     }
 }
 
