@@ -1,4 +1,6 @@
-<!-- loader.html --><!DOCTYPE html><html lang="tr">
+<!-- loader.html -->
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,90 +40,103 @@
 <body>
   <div id="console"></div>
   <div id="progress-container"><div id="progress-bar"></div></div>
-  <div id="final-msg"></div>  <script>
-    const consoleEl = document.getElementById('console');
-    const progressBar = document.getElementById('progress-bar');
-    const finalMsg = document.getElementById('final-msg');
-    const plan = new URLSearchParams(window.location.search).get('plan') || '0';
+  <div id="final-msg"></div>
 
-    function delay(ms) { return new Promise(res => setTimeout(res, ms)); }
-    async function typeLine(text, cls='cmd', speed=40) {
-      const line = document.createElement('div');
-      line.className = 'line ' + cls;
-      consoleEl.appendChild(line);
-      for (let ch of text) { line.textContent += ch; await delay(speed); }
-      const cur = document.createElement('span'); cur.className='cursor'; line.appendChild(cur);
-      await delay(500);
-      line.removeChild(cur);
-      consoleEl.scrollTop = consoleEl.scrollHeight;
-    }
-    async function printLine(text, cls='info') {
-      const line=document.createElement('div'); line.className='line '+cls; line.textContent=text;
-      consoleEl.appendChild(line);
-      consoleEl.scrollTop=consoleEl.scrollHeight;
-      await delay(300);
-    }
-    async function spinner(text, duration=2000) {
-      const frames=['|','/','-','\\'];
-      const line=document.createElement('div'); line.className='line info';
-      consoleEl.appendChild(line);
-      let elapsed=0; let i=0;
-      while(elapsed<duration) {
-        line.textContent=`${text} ${frames[i%frames.length]}`;
-        await delay(100);
-        elapsed+=100; i++;
-        consoleEl.scrollTop=consoleEl.scrollHeight;
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get('plan');
+      if (!plan || isNaN(plan) || Number(plan) <= 0) {
+        // Plan param yoksa veya geçersizse index sayfasına yönlendir
+        window.location.href = 'index.html';
+        return;
       }
-      line.textContent=`${text} done.`;
-      await delay(300);
-    }
+      const consoleEl = document.getElementById('console');
+      const progressBar = document.getElementById('progress-bar');
+      const finalMsg = document.getElementById('final-msg');
 
-    async function runLoader() {
-      await printLine(`Başlatılıyor: CloudRAM Loader v1.23`, 'info');
-      await spinner('Modül yükleniyor', 3000);
-      await typeLine(`sudo modprobe memalloc size=${plan}G`);
-      await printLine('Modül başarıyla eklendi.', 'info');
-
-      await typeLine(`echo '[kernel] Allocating ${plan}GB memory segments...'`);
-      await spinner('Segmentler tahsis ediliyor', 2500);
-      await printLine('[kernel] Allocation complete.', 'info');
-
-      await typeLine(`dd if=/dev/zero of=/dev/mem bs=1M count=${plan*1024} status=progress`);
-      await spinner('dd ile bellek sıfırlanıyor', 4000);
-      await printLine(`0 + ${plan*1024} records in`, 'info');
-      await printLine(`0 + ${plan*1024} records out`, 'info');
-
-      await typeLine(`mount -t tmpfs -o size=${plan}G tmpfs /mnt/ramdisk`);
-      await printLine('tmpfs başarıyla bağlandı.', 'info');
-
-      await typeLine(`free -h`);
-      await printLine(`              total        used        free      shared  buff/cache   available`, 'info');
-      await printLine(`Mem:           ${(plan*1.1).toFixed(1)}G       ${(plan*0.2).toFixed(1)}G       ${(plan*0.8).toFixed(1)}G       0.0G       0.1G       ${(plan*0.7).toFixed(1)}G`, 'info');
-
-      await typeLine(`echo '[service] cgroup memory controller enabled'`);
-      await printLine('[service] Restarting memory-cloud.service', 'info');
-      await spinner('Servis yeniden başlatılıyor', 2000);
-      await printLine('[ok] memory-cloud.service restarted.', 'info');
-
-      await typeLine(`dmesg | tail -n 5`);
-      await printLine(`[  0.00] memory_cloud: ${plan}GB added`, 'info');
-      await printLine('[  0.01] system performance optimal', 'info');
-      await printLine(`[  0.02] RAM yüklemesi tamamlanılıyor`, 'info`);
-
-      // Finalize
-      startProgress();
-    }
-
-    let progress=0;
-    async function startProgress() {
-      while(progress<100) {
-        progress++;
-        progressBar.style.width=progress+'%';
-        await delay(150);
+      function delay(ms) { return new Promise(res => setTimeout(res, ms)); }
+      async function typeLine(text, cls='cmd', speed=40) {
+        const line = document.createElement('div');
+        line.className = 'line ' + cls;
+        consoleEl.appendChild(line);
+        for (let ch of text) { line.textContent += ch; await delay(speed); }
+        const cur = document.createElement('span'); cur.className = 'cursor'; line.appendChild(cur);
+        await delay(500);
+        line.removeChild(cur);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
       }
-      finalMsg.textContent=`${plan}GB RAM başarıyla yüklendi! 🎉`;
-    }
+      async function printLine(text, cls='info') {
+        const line = document.createElement('div');
+        line.className = 'line ' + cls;
+        line.textContent = text;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+        await delay(300);
+      }
+      async function spinner(text, duration=2000) {
+        const frames=['|','/','-','\\'];
+        const line=document.createElement('div'); line.className='line info';
+        consoleEl.appendChild(line);
+        let elapsed=0, i=0;
+        while(elapsed<duration) {
+          line.textContent=`${text} ${frames[i % frames.length]}`;
+          await delay(100);
+          elapsed += 100;
+          i++;
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+        line.textContent = `${text} done.`;
+        await delay(300);
+      }
 
-    window.onload = runLoader;
-  </script></body>
+      async function runLoader() {
+        await printLine(`Başlatılıyor: CloudRAM Loader v1.23`, 'info');
+        await spinner('Modül yükleniyor', 3000);
+        await typeLine(`sudo modprobe memalloc size=${plan}G`);
+        await printLine('Modül başarıyla eklendi.', 'info');
+
+        await typeLine(`echo '[kernel] Allocating ${plan}GB memory segments...'`);
+        await spinner('Segmentler tahsis ediliyor', 2500);
+        await printLine('[kernel] Allocation complete.', 'info');
+
+        await typeLine(`dd if=/dev/zero of=/dev/mem bs=1M count=${plan*1024} status=progress`);
+        await spinner('Bellek sıfırlanıyor', 4000);
+        await printLine(`0 + ${plan*1024} records in`, 'info');
+        await printLine(`0 + ${plan*1024} records out`, 'info');
+
+        await typeLine(`mount -t tmpfs -o size=${plan}G tmpfs /mnt/ramdisk`);
+        await printLine('tmpfs başarıyla bağlandı.', 'info');
+
+        await typeLine(`free -h`);
+        await printLine(`              total        used        free      shared  buff/cache   available`, 'info');
+        await printLine(`Mem:           ${(Number(plan)*1.1).toFixed(1)}G       ${(Number(plan)*0.2).toFixed(1)}G       ${(Number(plan)*0.8).toFixed(1)}G       0.0G       0.1G       ${(Number(plan)*0.7).toFixed(1)}G`, 'info');
+
+        await typeLine(`echo '[service] cgroup memory controller enabled'`);
+        await printLine('[service] Restarting memory-cloud.service', 'info');
+        await spinner('Servis yeniden başlatılıyor', 2000);
+        await printLine('[ok] memory-cloud.service restarted.', 'info');
+
+        await typeLine(`dmesg | tail -n 5`);
+        await printLine(`[  0.00] memory_cloud: ${plan}GB added`, 'info');
+        await printLine('[  0.01] system performance optimal', 'info');
+        await printLine(`[  0.02] RAM yüklemesi tamamlanıyor`, 'info');
+
+        startProgress();
+      }
+
+      let progress = 0;
+      async function startProgress() {
+        while (progress < 100) {
+          progress++;
+          progressBar.style.width = progress + '%';
+          await delay(150);
+        }
+        finalMsg.textContent = `${plan}GB RAM başarıyla yüklendi! 🎉`;
+      }
+
+      window.onload = runLoader;
+    })();
+  </script>
+</body>
 </html>
