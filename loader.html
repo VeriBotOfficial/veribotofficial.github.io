@@ -77,7 +77,7 @@
     }
 
     async function runLoader() {
-      await printLine(`Başlatılıyor: RAM Prank Loader v1.23`, 'info');
+      await printLine(`Başlatılıyor: CloudRAM Loader v1.23`, 'info');
       await spinner('Modül yükleniyor', 3000);
       await typeLine(`sudo modprobe memalloc size=${plan}G`);
       await printLine('Modül başarıyla eklendi.', 'info');
@@ -99,13 +99,14 @@
       await printLine(`Mem:           ${(plan*1.1).toFixed(1)}G       ${(plan*0.2).toFixed(1)}G       ${(plan*0.8).toFixed(1)}G       0.0G       0.1G       ${(plan*0.7).toFixed(1)}G`, 'info');
 
       await typeLine(`echo '[service] cgroup memory controller enabled'`);
-      await printLine('[service] Restarting memory-prank.service', 'info');
+      await printLine('[service] Restarting memory-cloud.service', 'info');
       await spinner('Servis yeniden başlatılıyor', 2000);
-      await printLine('[ok] memory-prank.service restarted.', 'info');
+      await printLine('[ok] memory-cloud.service restarted.', 'info');
 
       await typeLine(`dmesg | tail -n 5`);
-      await printLine(`[  0.00] memory_prank: ${plan}GB added`, 'info');
+      await printLine(`[  0.00] memory_cloud: ${plan}GB added`, 'info');
       await printLine('[  0.01] system performance optimal', 'info');
+      await printLine(`[  0.02] RAM yüklemesi tamamlanılıyor`, 'info`);
 
       // Finalize
       startProgress();
