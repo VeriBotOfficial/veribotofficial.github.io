@@ -1,107 +1,193 @@
-<!-- index.html --><!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>beleş ram yükle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #9d00ff;
-      --accent: #00ffd6;
-      --bg: #0d0d0d;
-      --card-bg: rgba(255,255,255,0.05);
-      --text: #e0e0e0;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; }
-    header { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(0,0,0,0.8); position: sticky; top: 0; z-index: 100; }
-    header .logo { font-size: 1.8em; font-weight: 800; color: var(--accent); }
-    header nav a { margin-left: 30px; text-decoration: none; font-weight: 500; color: var(--text); transition: color .3s; }
-    header nav a:hover { color: var(--primary); }
-    .hero { padding: 100px 50px; text-align: center; background: linear-gradient(135deg, #1a1a1a, #090909);
-      background-attachment: fixed;
-    }
-    .hero h1 { font-size: 3rem; margin-bottom: 20px; }
-    .hero p { font-size: 1.2rem; margin-bottom: 40px; color: #bbb; }
-    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 30px; padding: 0 50px 80px; }
-    .plan { background: var(--card-bg); border: 1px solid #222; border-radius: 16px; overflow: hidden; transition: transform .3s, border-color .3s;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-    }
-    .plan:hover { transform: translateY(-10px); border-color: var(--accent); }
-    .plan-header { background: #111; padding: 30px; text-align: center; }
-    .plan-header h2 { font-size: 2.5rem; color: var(--accent); }
-    .plan-body { padding: 20px; text-align: center; }
-    .plan-body p { font-size: 1.1rem; margin-bottom: 20px; }
-    .plan-body button {
-      background: var(--primary); border: none; padding: 12px 30px; font-size: 1rem; font-weight: 600; color: #fff;
-      border-radius: 50px; cursor: pointer; transition: background .3s;
-    }
-    .plan-body button:hover { background: var(--accent); }
-    footer { text-align: center; padding: 40px; font-size: .9rem; color: #777; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flats Aspirin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4A90E2; /* Canlı Mavi */
+            --secondary-color: #50E3C2; /* Turkuaz */
+            --text-color: #333;
+            --light-bg: #F8F9FA; /* Çok açık gri */
+            --white: #FFFFFF;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 100%); /* Hafif degrade arka plan */
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            overflow: hidden; /* Taşmaları engelle */
+        }
+
+        .container {
+            background-color: var(--white);
+            padding: 45px 35px;
+            border-radius: 16px; /* Daha yuvarlak köşeler */
+            box-shadow: 0 10px 30px var(--shadow-medium); /* Belirgin gölge */
+            text-align: center;
+            width: 100%;
+            max-width: 550px; /* Daha geniş alan */
+            box-sizing: border-box;
+            position: relative; /* Animasyonlar için */
+            overflow: hidden; /* Kenar taşmalarını engelle */
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: moveElement 15s infinite alternate ease-in-out;
+            z-index: 0;
+        }
+
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: moveElement 18s infinite alternate-reverse ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes moveElement {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 30px) rotate(10deg); }
+            100% { transform: translate(0, 0); }
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2.8em; /* Daha büyük başlık */
+            font-weight: 700;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1; /* İçeriğin katmanını yükselt */
+        }
+
+        p {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.15em;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            color: #555;
+            position: relative;
+            z-index: 1;
+        }
+
+        #selection-button {
+            padding: 18px 45px;
+            background: linear-gradient(45deg, var(--primary-color) 0%, #6CC6FF 100%); /* Degrade buton */
+            color: var(--white);
+            border: none;
+            border-radius: 10px; /* Daha yuvarlak buton */
+            font-size: 1.3em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease; /* Daha yumuşak geçişler */
+            box-shadow: 0 8px 25px var(--shadow-medium);
+            letter-spacing: 0.5px;
+            outline: none; /* Odaklandığında kenarlık olmasın */
+            position: relative;
+            z-index: 1;
+        }
+
+        #selection-button:hover {
+            transform: translateY(-5px) scale(1.02); /* Hafif yukarı ve büyütme */
+            box-shadow: 0 12px 35px var(--shadow-medium);
+        }
+
+        #selection-button:active {
+            transform: translateY(-2px) scale(0.99);
+            box-shadow: 0 5px 15px var(--shadow-light);
+        }
+
+        #result-display {
+            margin-top: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3em; /* Daha büyük sonuç */
+            font-weight: 700;
+            color: var(--secondary-color); /* Turkuaz sonuç */
+            min-height: 1.8em; /* İçerik yokken de yer tutar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0; /* Başlangıçta gizli */
+            transform: translateY(20px); /* Başlangıçta aşağıda */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Animasyon */
+            position: relative;
+            z-index: 1;
+        }
+
+        #result-display.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">CLOUDRam</div>
-    <nav>
-      <a href="#"><i>Home</i></a>
-      <a href="#plans"><i>Planlar</i></a>
-      <a href="#contact"><i>İletişim</i></a>
-    </nav>
-  </header>  <section class="hero">
-    <h1>Cloud RAM Yükle</h1>
-    <p>Ultra hızlı bulut sunucularımızdan tamamen ücretsiz RAM Yükle! Hızlı, güvenli ve tamamen ücretsiz.</p>
-  </section>  <section id="plans" class="plans">
-    <div class="plan">
-      <div class="plan-header">
-        <h2>2 GB</h2>
-      </div>
-      <div class="plan-body">
-        <p>Ücretsiz</p>
-        <button onclick="selectPlan(2)">Şimdi Yükle</button>
-      </div>
+    <div class="container">
+        <h1>Aspirin Sayı Seçme Aracı</h1>
+        <p>Rastgele seçim yapmak için butona dokunun.</p>
+
+        <button id="selection-button">Seçim Yap!</button>
+
+        <div id="result-display"></div>
     </div>
-    <div class="plan">
-      <div class="plan-header">
-        <h2>4 GB</h2>
-      </div>
-      <div class="plan-body">
-        <p>Ücretsiz</p>
-        <button onclick="selectPlan(4)">Şimdi Yükle</button>
-      </div>
-    </div>
-    <div class="plan">
-      <div class="plan-header">
-        <h2>8 GB</h2>
-      </div>
-      <div class="plan-body">
-        <p>Ücretsiz</p>
-        <button onclick="selectPlan(8)">Şimdi Yükle</button>
-      </div>
-    </div>
-    <div class="plan">
-      <div class="plan-header">
-        <h2>16 GB</h2>
-      </div>
-      <div class="plan-body">
-        <p>Ücretsiz</p>
-        <button onclick="selectPlan(16)">Şimdi Yükle</button>
-      </div>
-    </div>
-    <div class="plan">
-      <div class="plan-header">
-        <h2>32 GB</h2>
-      </div>
-      <div class="plan-body">
-        <p>Ücretsiz</p>
-        <button onclick="selectPlan(32)">Şimdi Yükle</button>
-      </div>
-    </div>
-  </section>  <footer id="contact">
-    <p>© 2025 CLOUDRam. Tüm hakları saklıdır. şaka amaçli yapildi bu arada.</p>
-  </footer>  <script>
-    function selectPlan(gb) {
-      window.location.href = `loader.html?plan=${gb}`;
-    }
-  </script></body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectionButton = document.getElementById('selection-button');
+            const resultDisplay = document.getElementById('result-display');
+
+            const options = [
+                "DOKTOR", "ASPİRİN", "1", "2", "3", "4", "5",
+                "6", "7", "8", "9", "10"
+            ];
+
+            selectionButton.addEventListener('click', () => {
+                // Her tıklamada sonucu sıfırla ve gizle
+                resultDisplay.classList.remove('show');
+                resultDisplay.textContent = '';
+
+                // Kısa bir gecikme ekleyerek animasyonu tetikle
+                setTimeout(() => {
+                    const randomIndex = Math.floor(Math.random() * options.length);
+                    const selectedOption = options[randomIndex];
+                    resultDisplay.textContent = selectedOption;
+                    resultDisplay.classList.add('show'); // Sonucu göster ve animasyonu tetikle
+                }, 100); // 100ms gecikme
+
+                // Butona tıklama sonrası geçici animasyon
+                selectionButton.style.pointerEvents = 'none'; // Tıklamayı engelle
+                setTimeout(() => {
+                    selectionButton.style.pointerEvents = 'auto'; // Tıklamayı tekrar etkinleştir
+                }, 600); // Sonuç animasyonu süresine göre ayarla
+            });
+        });
+    </script>
+</body>
 </html>
