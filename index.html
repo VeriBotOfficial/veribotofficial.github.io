@@ -1,274 +1,214 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flats Aspirin</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <title>Aspirin Tahmin Oyunu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #007BFF; /* Modern Mavi */
-            --secondary-color: #1EE494; /* Canlı Yeşil */
+            --primary-color: #007BFF;
+            --success-color: #1EE494;
+            --danger-color: #FF4C60;
             --text-color: #212529;
             --light-bg: #F0F2F5;
             --white: #FFFFFF;
-            --border-color: #E9ECEF;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 1rem;
+        }body {
+        margin: 0;
+        padding: 2rem;
+        background: var(--light-bg);
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        color: var(--text-color);
+    }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+    .game-container {
+        background: var(--white);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            display: grid;
-            place-items: center;
-            min-height: 100vh;
-            background-color: var(--light-bg);
-            margin: 0;
-            padding: 1rem;
-            color: var(--text-color);
-        }
+    h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
 
-        .container {
-            background-color: var(--white);
-            padding: 2.5rem 2rem;
-            border-radius: 1rem; /* 16px */
-            box-shadow: var(--shadow);
-            text-align: center;
-            width: 100%;
-            max-width: 480px;
-            transition: all 0.3s ease;
-        }
+    .start-btn, .submit-btn {
+        background: var(--primary-color);
+        color: var(--white);
+        border: none;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        font-size: 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
 
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            color: var(--primary-color);
-            margin: 0 0 1rem;
-            font-size: clamp(2rem, 5vw, 2.5rem); /* Duyarlı font boyutu */
-            font-weight: 600;
-        }
+    .submit-btn {
+        margin-top: 1.5rem;
+        display: none;
+    }
 
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin: 0 0 2rem;
-            color: #6C757D;
-        }
+    .start-btn:hover, .submit-btn:hover {
+        opacity: 0.9;
+    }
 
-        #selection-button {
-            padding: 1rem 2.5rem;
-            background-image: linear-gradient(45deg, var(--primary-color) 0%, #4D9FFF 100%);
-            color: var(--white);
-            border: none;
-            border-radius: 0.5rem; /* 8px */
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease-out;
-            box-shadow: var(--shadow);
-            outline-offset: 4px;
-        }
+    .options-grid {
+        margin-top: 1.5rem;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+    }
 
-        #selection-button:hover:not(:disabled) {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        #selection-button:active:not(:disabled) {
-            transform: translateY(-1px);
-        }
+    .option-btn {
+        padding: 0.75rem;
+        border: 2px solid transparent;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        background-color: var(--light-bg);
+        transition: all 0.2s ease;
+    }
 
-        #selection-button:disabled {
-            cursor: wait;
-            opacity: 0.7;
-        }
+    .option-btn.selected {
+        background-color: var(--success-color);
+        color: var(--white);
+    }
 
-        #result-display {
-            margin-top: 2.5rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: clamp(3rem, 10vw, 4.5rem);
-            font-weight: 600;
-            color: var(--secondary-color);
-            min-height: 1.5em;
-            display: grid;
-            place-items: center;
-        }
+    .result-message {
+        margin-top: 2rem;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
 
-        .result-value {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-        }
+    .confetti {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 9999;
+    }
+</style>
 
-        .result-value.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Geçmiş Bölümü */
-        .history-section {
-            margin-top: 3rem;
-            text-align: left;
-            border-top: 1px solid var(--border-color);
-            padding-top: 1.5rem;
-        }
-
-        .history-section h2 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.25rem;
-            margin: 0 0 1rem;
-            color: var(--text-color);
-        }
-
-        #history-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        #history-list.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #history-list li {
-            background-color: var(--light-bg);
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95rem;
-            transition: background-color 0.2s ease;
-        }
-        
-        #history-list li:hover {
-            background-color: #E9ECEF;
-        }
-
-        .history-value {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .history-time {
-            font-size: 0.85rem;
-            color: #6C757D;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Aspirin Sayı Seçici</h1>
-        <p>Rastgele bir seçim yapmak için butona tıklayın.</p>
-
-        <button id="selection-button">Seçim Yap!</button>
-
-        <div id="result-display"></div>
-
-        <div class="history-section" id="history-container" style="display: none;">
-            <h2>Son Seçimler</h2>
-            <ul id="history-list"></ul>
-        </div>
+    <div class="game-container">
+        <h1>Aspirin Tahmin Oyunu</h1>
+        <button class="start-btn" id="startBtn">Sayı Seç</button>
+        <div class="options-grid" id="optionsGrid"></div>
+        <button class="submit-btn" id="submitBtn">Gönder</button>
+        <div class="result-message" id="resultMsg"></div>
     </div>
+    <canvas class="confetti" id="confetti"></canvas><script>
+    const options = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
+    let computerChoice = "";
+    let selectedOption = "";
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Elementleri Seçme
-            const selectionButton = document.getElementById('selection-button');
-            const resultDisplay = document.getElementById('result-display');
-            const historyContainer = document.getElementById('history-container');
-            const historyList = document.getElementById('history-list');
+    const startBtn = document.getElementById("startBtn");
+    const optionsGrid = document.getElementById("optionsGrid");
+    const submitBtn = document.getElementById("submitBtn");
+    const resultMsg = document.getElementById("resultMsg");
+    const confettiCanvas = document.getElementById("confetti");
 
-            // Seçenekler ve Geçmiş Verisi
-            const options = ["DOKTOR", "ASPİRİN", ...Array.from({ length: 10 }, (_, i) => (i + 1).toString())];
-            let selectionHistory = [];
+    const startGame = () => {
+        computerChoice = options[Math.floor(Math.random() * options.length)];
+        selectedOption = "";
+        resultMsg.textContent = "";
+        optionsGrid.innerHTML = "";
+        submitBtn.style.display = "none";
 
-            // Geçmişi Ekrana Yazdıran Fonksiyon
-            const renderHistory = () => {
-                // Eğer geçmiş boşsa, geçmiş bölümünü gizle
-                if (selectionHistory.length === 0) {
-                    historyContainer.style.display = 'none';
-                    return;
-                }
-                
-                historyContainer.style.display = 'block';
-                historyList.innerHTML = ''; // Listeyi temizle
-
-                selectionHistory.forEach(item => {
-                    const listItem = document.createElement('li');
-                    
-                    const valueSpan = document.createElement('span');
-                    valueSpan.className = 'history-value';
-                    valueSpan.textContent = item.value;
-
-                    const timeSpan = document.createElement('span');
-                    timeSpan.className = 'history-time';
-                    timeSpan.textContent = item.time;
-                    
-                    listItem.appendChild(valueSpan);
-                    listItem.appendChild(timeSpan);
-                    historyList.appendChild(listItem);
-                });
-
-                // Animasyon için class ekle
-                historyList.classList.remove('show');
-                void historyList.offsetWidth; // Reflow tetiklemesi
-                historyList.classList.add('show');
-            };
-            
-            // Seçim Yapan Fonksiyon
-            const makeSelection = () => {
-                // Sonuç için geçici bir span oluşturup animasyonla ekle
-                const resultSpan = document.createElement('span');
-                resultSpan.className = 'result-value';
-                resultDisplay.innerHTML = ''; // Önceki sonucu temizle
-                resultDisplay.appendChild(resultSpan);
-
-                // Butonu geçici olarak devre dışı bırak
-                selectionButton.disabled = true;
-                
-                // Animasyonun daha akıcı olması için kısa bir gecikme
-                setTimeout(() => {
-                    const randomIndex = Math.floor(Math.random() * options.length);
-                    const selectedOption = options[randomIndex];
-                    
-                    // Sonucu göster ve animasyonu tetikle
-                    resultSpan.textContent = selectedOption;
-                    resultSpan.classList.add('show');
-
-                    // Geçmişe ekle
-                    const now = new Date();
-                    const timeString = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
-                    selectionHistory.unshift({ value: selectedOption, time: timeString });
-
-                    // Geçmişte sadece son 5 öğeyi tut
-                    if (selectionHistory.length > 5) {
-                        selectionHistory.pop();
-                    }
-
-                    // Geçmişi güncelle
-                    renderHistory();
-                    
-                    // Butonu tekrar aktif et
-                    selectionButton.disabled = false;
-                }, 150);
-            };
-
-            // Olay Dinleyicisi
-            selectionButton.addEventListener('click', makeSelection);
+        options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.textContent = option;
+            btn.className = "option-btn";
+            btn.addEventListener("click", () => {
+                selectedOption = option;
+                document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+                btn.classList.add("selected");
+                submitBtn.style.display = "inline-block";
+            });
+            optionsGrid.appendChild(btn);
         });
-    </script>
+    };
+
+    const submitGuess = () => {
+        if (selectedOption === computerChoice) {
+            resultMsg.textContent = "Doğru Tahmin!";
+            resultMsg.style.color = "var(--success-color)";
+            launchConfetti();
+            setTimeout(() => {
+                resultMsg.textContent = "";
+                clearConfetti();
+                optionsGrid.innerHTML = "";
+                submitBtn.style.display = "none";
+                selectedOption = "";
+            }, 3000);
+        } else {
+            resultMsg.textContent = "Yanlış! Tekrar deneyin.";
+            resultMsg.style.color = "var(--danger-color)";
+            document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+            selectedOption = "";
+            submitBtn.style.display = "none";
+        }
+    };
+
+    startBtn.addEventListener("click", startGame);
+    submitBtn.addEventListener("click", submitGuess);
+
+    // Konfeti Efekti
+    const ctx = confettiCanvas.getContext("2d");
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+
+    let confettis = [];
+
+    const launchConfetti = () => {
+        confettis = Array.from({ length: 150 }, () => ({
+            x: Math.random() * confettiCanvas.width,
+            y: Math.random() * confettiCanvas.height - confettiCanvas.height,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * 20 + 10,
+            color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+            tilt: Math.random() * 10 - 10,
+            tiltAngle: 0
+        }));
+        animateConfetti();
+    };
+
+    const animateConfetti = () => {
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+        confettis.forEach(c => {
+            c.y += Math.cos(c.d / 10);
+            c.tiltAngle += 0.05;
+            c.tilt = Math.sin(c.tiltAngle) * 15;
+
+            ctx.beginPath();
+            ctx.lineWidth = c.r / 2;
+            ctx.strokeStyle = c.color;
+            ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+            ctx.lineTo(c.x + c.tilt, c.y + c.tilt);
+            ctx.stroke();
+        });
+        requestAnimationFrame(animateConfetti);
+    };
+
+    const clearConfetti = () => {
+        confettis = [];
+        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    };
+</script>
+
 </body>
 </html>
