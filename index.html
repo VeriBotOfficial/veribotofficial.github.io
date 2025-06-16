@@ -1,128 +1,145 @@
 <!DOCTYPE html><html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aspirin Round Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 500px;
-        }
-        button {
-            padding: 0.75rem 1.5rem;
-            margin: 0.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .start-btn {
-            background: #007bff;
-            color: white;
-        }
-        .option-btn {
-            background: #f0f0f0;
-        }
-        .option-btn.selected {
-            background: #1EE494;
-            color: white;
-        }
-        .submit-btn {
-            background: #007bff;
-            color: white;
-            display: none;
-            margin-top: 1rem;
-        }
-        .message {
-            margin-top: 1rem;
-            font-weight: bold;
-            color: red;
-            display: none;
-        }
-        .confetti {
-            font-size: 2rem;
-            display: none;
-            margin-top: 1rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspirin Round Oyunu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: grid;
+      place-items: center;
+      background: #f0f2f5;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+      color: #212529;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      color: #007BFF;
+    }
+    #startBtn, #submitGuess {
+      background: linear-gradient(45deg, #007BFF, #4D9FFF);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .option-btn {
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      border: 2px solid #007BFF;
+      background: white;
+      color: #007BFF;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .option-btn.selected {
+      background: #1EE494;
+      color: white;
+      border-color: #1EE494;
+    }
+    #resultMsg {
+      margin-top: 2rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>Aspirin Round</h1>
-    <button id="startBtn" class="start-btn">Sayı Seç</button>
-    <div id="optionsContainer"></div>
-    <button id="submitBtn" class="submit-btn">Gönder</button>
-    <div id="message" class="message"></div>
-    <div id="confetti" class="confetti">🎉🎊✨</div>
-</div>
-<script>
-    const options = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
-    let correctChoice = null;
-    let selectedValue = null;const startBtn = document.getElementById('startBtn');
-const optionsContainer = document.getElementById('optionsContainer');
-const submitBtn = document.getElementById('submitBtn');
-const message = document.getElementById('message');
-const confetti = document.getElementById('confetti');
+  <div class="container">
+    <h1>Aspirin Sayı Seçici</h1>
+    <button id="startBtn">Sayı Seç</button>
+    <div id="options"></div>
+    <button id="submitGuess" style="display: none;">Gönder</button>
+    <div id="resultMsg"></div>
+  </div>  <script>
+    const optionsPool = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
+    let selectedSecret = "";
+    let selectedOption = null;
+    const optionsDiv = document.getElementById("options");
+    const resultMsg = document.getElementById("resultMsg");
+    const startBtn = document.getElementById("startBtn");
+    const submitGuess = document.getElementById("submitGuess");
+    const jsConfetti = new JSConfetti();
 
-startBtn.addEventListener('click', () => {
-    // Reset
-    correctChoice = options[Math.floor(Math.random() * options.length)];
-    selectedValue = null;
-    optionsContainer.innerHTML = '';
-    submitBtn.style.display = 'none';
-    message.style.display = 'none';
-    confetti.style.display = 'none';
+    function startGame() {
+      startBtn.style.display = "none";
+      resultMsg.textContent = "";
+      selectedSecret = optionsPool[Math.floor(Math.random() * optionsPool.length)];
+      optionsDiv.innerHTML = "";
+      selectedOption = null;
+      submitGuess.style.display = "none";
 
-    // Create buttons
-    options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.textContent = option;
-        btn.className = 'option-btn';
-        btn.addEventListener('click', () => {
-            selectedValue = option;
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            submitBtn.style.display = 'inline-block';
-        });
-        optionsContainer.appendChild(btn);
-    });
-});
-
-submitBtn.addEventListener('click', () => {
-    if (selectedValue === correctChoice) {
-        confetti.style.display = 'block';
-        submitBtn.style.display = 'none';
-        setTimeout(() => {
-            optionsContainer.innerHTML = '';
-            confetti.style.display = 'none';
-        }, 3000);
-    } else {
-        message.textContent = 'Yanlış Bildiniz!';
-        message.style.display = 'block';
-        submitBtn.style.display = 'none';
-        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-        selectedValue = null;
-        setTimeout(() => {
-            message.style.display = 'none';
-        }, 2000);
+      optionsPool.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.className = "option-btn";
+        btn.onclick = () => {
+          document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          selectedOption = opt;
+          submitGuess.style.display = "inline-block";
+        };
+        optionsDiv.appendChild(btn);
+      });
     }
-});
 
-</script>
-</body>
+    function resetOptions() {
+      document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+      selectedOption = null;
+      submitGuess.style.display = "none";
+    }
+
+    function submit() {
+      if (!selectedOption) return;
+
+      if (selectedOption === selectedSecret) {
+        resultMsg.textContent = "DOĞRU!";
+        resultMsg.style.color = "#1EE494";
+        jsConfetti.addConfetti({
+          emojis: ['🎉','✨','🎈','🥳'],
+          confettiNumber: 200
+        });
+        setTimeout(() => {
+          optionsDiv.innerHTML = "";
+          resultMsg.textContent = "";
+          startBtn.style.display = "inline-block";
+        }, 3000);
+      } else {
+        resultMsg.textContent = "YANLIŞ! Tekrar deneyin.";
+        resultMsg.style.color = "#FF4D4F";
+        setTimeout(() => {
+          resultMsg.textContent = "";
+        }, 2000);
+        resetOptions();
+      }
+    }
+
+    startBtn.onclick = startGame;
+    submitGuess.onclick = submit;
+  </script></body>
 </html>
