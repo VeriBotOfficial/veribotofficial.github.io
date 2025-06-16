@@ -1,214 +1,145 @@
 <!DOCTYPE html><html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aspirin Tahmin Oyunu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #007BFF;
-            --success-color: #1EE494;
-            --danger-color: #FF4C60;
-            --text-color: #212529;
-            --light-bg: #F0F2F5;
-            --white: #FFFFFF;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --radius: 1rem;
-        }body {
-        margin: 0;
-        padding: 2rem;
-        background: var(--light-bg);
-        font-family: 'Inter', sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        color: var(--text-color);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aspirin Round Oyunu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: grid;
+      place-items: center;
+      background: #f0f2f5;
+      min-height: 100vh;
+      margin: 0;
+      padding: 2rem;
+      color: #212529;
     }
-
-    .game-container {
-        background: var(--white);
-        padding: 2rem;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        max-width: 500px;
-        width: 100%;
-        text-align: center;
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
     }
-
     h1 {
-        font-family: 'Poppins', sans-serif;
-        font-size: 2rem;
-        margin-bottom: 1rem;
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      color: #007BFF;
     }
-
-    .start-btn, .submit-btn {
-        background: var(--primary-color);
-        color: var(--white);
-        border: none;
-        padding: 1rem 2rem;
-        font-weight: 600;
-        font-size: 1rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease-in-out;
+    #startBtn, #submitGuess {
+      background: linear-gradient(45deg, #007BFF, #4D9FFF);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-top: 1rem;
     }
-
-    .submit-btn {
-        margin-top: 1.5rem;
-        display: none;
+    #options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
     }
-
-    .start-btn:hover, .submit-btn:hover {
-        opacity: 0.9;
-    }
-
-    .options-grid {
-        margin-top: 1.5rem;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.75rem;
-    }
-
     .option-btn {
-        padding: 0.75rem;
-        border: 2px solid transparent;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        background-color: var(--light-bg);
-        transition: all 0.2s ease;
+      padding: 1rem 1.5rem;
+      font-size: 1rem;
+      border: 2px solid #007BFF;
+      background: white;
+      color: #007BFF;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: 0.2s;
     }
-
     .option-btn.selected {
-        background-color: var(--success-color);
-        color: var(--white);
+      background: #1EE494;
+      color: white;
+      border-color: #1EE494;
     }
-
-    .result-message {
-        margin-top: 2rem;
-        font-size: 1.3rem;
-        font-weight: 600;
+    #resultMsg {
+      margin-top: 2rem;
+      font-size: 1.25rem;
+      font-weight: bold;
     }
-
-    .confetti {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        pointer-events: none;
-        z-index: 9999;
-    }
-</style>
-
+  </style>
 </head>
 <body>
-    <div class="game-container">
-        <h1>Aspirin Tahmin Oyunu</h1>
-        <button class="start-btn" id="startBtn">Sayı Seç</button>
-        <div class="options-grid" id="optionsGrid"></div>
-        <button class="submit-btn" id="submitBtn">Gönder</button>
-        <div class="result-message" id="resultMsg"></div>
-    </div>
-    <canvas class="confetti" id="confetti"></canvas><script>
-    const options = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
-    let computerChoice = "";
-    let selectedOption = "";
-
-    const startBtn = document.getElementById("startBtn");
-    const optionsGrid = document.getElementById("optionsGrid");
-    const submitBtn = document.getElementById("submitBtn");
+  <div class="container">
+    <h1>Aspirin Sayı Seçici</h1>
+    <button id="startBtn">Sayı Seç</button>
+    <div id="options"></div>
+    <button id="submitGuess" style="display: none;">Gönder</button>
+    <div id="resultMsg"></div>
+  </div>  <script>
+    const optionsPool = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
+    let selectedSecret = "";
+    let selectedOption = null;
+    const optionsDiv = document.getElementById("options");
     const resultMsg = document.getElementById("resultMsg");
-    const confettiCanvas = document.getElementById("confetti");
+    const startBtn = document.getElementById("startBtn");
+    const submitGuess = document.getElementById("submitGuess");
+    const jsConfetti = new JSConfetti();
 
-    const startGame = () => {
-        computerChoice = options[Math.floor(Math.random() * options.length)];
-        selectedOption = "";
-        resultMsg.textContent = "";
-        optionsGrid.innerHTML = "";
-        submitBtn.style.display = "none";
+    function startGame() {
+      startBtn.style.display = "none";
+      resultMsg.textContent = "";
+      selectedSecret = optionsPool[Math.floor(Math.random() * optionsPool.length)];
+      optionsDiv.innerHTML = "";
+      selectedOption = null;
+      submitGuess.style.display = "none";
 
-        options.forEach(option => {
-            const btn = document.createElement("button");
-            btn.textContent = option;
-            btn.className = "option-btn";
-            btn.addEventListener("click", () => {
-                selectedOption = option;
-                document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
-                btn.classList.add("selected");
-                submitBtn.style.display = "inline-block";
-            });
-            optionsGrid.appendChild(btn);
+      optionsPool.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.className = "option-btn";
+        btn.onclick = () => {
+          document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          selectedOption = opt;
+          submitGuess.style.display = "inline-block";
+        };
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function resetOptions() {
+      document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
+      selectedOption = null;
+      submitGuess.style.display = "none";
+    }
+
+    function submit() {
+      if (!selectedOption) return;
+
+      if (selectedOption === selectedSecret) {
+        resultMsg.textContent = "DOĞRU!";
+        resultMsg.style.color = "#1EE494";
+        jsConfetti.addConfetti({
+          emojis: ['🎉','✨','🎈','🥳'],
+          confettiNumber: 200
         });
-    };
+        setTimeout(() => {
+          optionsDiv.innerHTML = "";
+          resultMsg.textContent = "";
+          startBtn.style.display = "inline-block";
+        }, 3000);
+      } else {
+        resultMsg.textContent = "YANLIŞ! Tekrar deneyin.";
+        resultMsg.style.color = "#FF4D4F";
+        setTimeout(() => {
+          resultMsg.textContent = "";
+        }, 2000);
+        resetOptions();
+      }
+    }
 
-    const submitGuess = () => {
-        if (selectedOption === computerChoice) {
-            resultMsg.textContent = "Doğru Tahmin!";
-            resultMsg.style.color = "var(--success-color)";
-            launchConfetti();
-            setTimeout(() => {
-                resultMsg.textContent = "";
-                clearConfetti();
-                optionsGrid.innerHTML = "";
-                submitBtn.style.display = "none";
-                selectedOption = "";
-            }, 3000);
-        } else {
-            resultMsg.textContent = "Yanlış! Tekrar deneyin.";
-            resultMsg.style.color = "var(--danger-color)";
-            document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
-            selectedOption = "";
-            submitBtn.style.display = "none";
-        }
-    };
-
-    startBtn.addEventListener("click", startGame);
-    submitBtn.addEventListener("click", submitGuess);
-
-    // Konfeti Efekti
-    const ctx = confettiCanvas.getContext("2d");
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-
-    let confettis = [];
-
-    const launchConfetti = () => {
-        confettis = Array.from({ length: 150 }, () => ({
-            x: Math.random() * confettiCanvas.width,
-            y: Math.random() * confettiCanvas.height - confettiCanvas.height,
-            r: Math.random() * 6 + 4,
-            d: Math.random() * 20 + 10,
-            color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-            tilt: Math.random() * 10 - 10,
-            tiltAngle: 0
-        }));
-        animateConfetti();
-    };
-
-    const animateConfetti = () => {
-        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-        confettis.forEach(c => {
-            c.y += Math.cos(c.d / 10);
-            c.tiltAngle += 0.05;
-            c.tilt = Math.sin(c.tiltAngle) * 15;
-
-            ctx.beginPath();
-            ctx.lineWidth = c.r / 2;
-            ctx.strokeStyle = c.color;
-            ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
-            ctx.lineTo(c.x + c.tilt, c.y + c.tilt);
-            ctx.stroke();
-        });
-        requestAnimationFrame(animateConfetti);
-    };
-
-    const clearConfetti = () => {
-        confettis = [];
-        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-    };
-</script>
-
-</body>
+    startBtn.onclick = startGame;
+    submitGuess.onclick = submit;
+  </script></body>
 </html>
