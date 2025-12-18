@@ -1,145 +1,126 @@
-<!DOCTYPE html><html lang="tr">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aspirin Round Oyunu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doruk Çavdar — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      display: grid;
-      place-items: center;
-      background: #f0f2f5;
-      min-height: 100vh;
-      margin: 0;
-      padding: 2rem;
-      color: #212529;
-    }
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      width: 100%;
-      max-width: 500px;
-    }
-    h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 2rem;
-      color: #007BFF;
-    }
-    #startBtn, #submitGuess {
-      background: linear-gradient(45deg, #007BFF, #4D9FFF);
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    #options {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .option-btn {
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
-      border: 2px solid #007BFF;
-      background: white;
-      color: #007BFF;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .option-btn.selected {
-      background: #1EE494;
-      color: white;
-      border-color: #1EE494;
-    }
-    #resultMsg {
-      margin-top: 2rem;
-      font-size: 1.25rem;
-      font-weight: bold;
-    }
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa4b2;--accent:#6ee7b7;--glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui;color:#e6eef6;background:radial-gradient(ellipse at 10% 10%, rgba(110,231,183,0.06), transparent 10%), linear-gradient(180deg,#071028 0%, #071225 60%)}
+    body.light{--bg:#f7fafc;--card:#ffffff;--muted:#4b5563;--accent:#2563eb;background:linear-gradient(180deg,#f8fafc,#eef2ff);color:#0f172a}
+    #bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+    .container{position:relative;z-index:2;max-width:1100px;margin:40px auto;padding:28px}
+    header{display:flex;gap:20px;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:14px;align-items:center}
+    .avatar{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:800;color:#05202b}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{margin:0;color:var(--muted)}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:inherit;cursor:pointer;backdrop-filter:blur(4px)}
+    .btn.ghost{background:transparent}
+    main{display:grid;grid-template-columns:1fr 380px;gap:26px;margin-top:26px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:18px;box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.04)}
+    .intro{min-height:320px;display:flex;flex-direction:column;gap:12px}
+    .type{font-weight:600;color:var(--accent)}
+    .actions{display:flex;gap:10px;margin-top:auto}
+    .timeline-item{padding:12px;border-radius:10px;margin-bottom:10px;background:rgba(255,255,255,0.02);display:flex;gap:12px}
+    .badge{min-width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,#0ea5a2,#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#012}
+    .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .project{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02);transition:.3s}
+    .project:hover{transform:translateY(-6px)}
+    .side{position:sticky;top:36px;height:max-content;display:flex;flex-direction:column;gap:12px}
+    .skills{display:flex;flex-wrap:wrap;gap:8px}
+    .skill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.05)}
+    footer{text-align:center;color:var(--muted);margin:30px 0}
+    .lang-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);z-index:10}
+    .lang-box{background:var(--card);padding:24px;border-radius:16px;text-align:center;animation:pop .4s ease}
+    @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+    @media(max-width:980px){main{grid-template-columns:1fr}.side{position:relative}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Aspirin Sayı Seçici</h1>
-    <button id="startBtn">Sayı Seç</button>
-    <div id="options"></div>
-    <button id="submitGuess" style="display: none;">Gönder</button>
-    <div id="resultMsg"></div>
-  </div>  <script>
-    const optionsPool = ["0", "00", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "DOKTOR", "ASPİRİN"];
-    let selectedSecret = "";
-    let selectedOption = null;
-    const optionsDiv = document.getElementById("options");
-    const resultMsg = document.getElementById("resultMsg");
-    const startBtn = document.getElementById("startBtn");
-    const submitGuess = document.getElementById("submitGuess");
-    const jsConfetti = new JSConfetti();
-
-    function startGame() {
-      startBtn.style.display = "none";
-      resultMsg.textContent = "";
-      selectedSecret = optionsPool[Math.floor(Math.random() * optionsPool.length)];
-      optionsDiv.innerHTML = "";
-      selectedOption = null;
-      submitGuess.style.display = "none";
-
-      optionsPool.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.textContent = opt;
-        btn.className = "option-btn";
-        btn.onclick = () => {
-          document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
-          btn.classList.add("selected");
-          selectedOption = opt;
-          submitGuess.style.display = "inline-block";
-        };
-        optionsDiv.appendChild(btn);
-      });
-    }
-
-    function resetOptions() {
-      document.querySelectorAll(".option-btn").forEach(b => b.classList.remove("selected"));
-      selectedOption = null;
-      submitGuess.style.display = "none";
-    }
-
-    function submit() {
-      if (!selectedOption) return;
-
-      if (selectedOption === selectedSecret) {
-        resultMsg.textContent = "DOĞRU!";
-        resultMsg.style.color = "#1EE494";
-        jsConfetti.addConfetti({
-          emojis: ['🎉','✨','🎈','🥳'],
-          confettiNumber: 200
-        });
-        setTimeout(() => {
-          optionsDiv.innerHTML = "";
-          resultMsg.textContent = "";
-          startBtn.style.display = "inline-block";
-        }, 3000);
-      } else {
-        resultMsg.textContent = "YANLIŞ! Tekrar deneyin.";
-        resultMsg.style.color = "#FF4D4F";
-        setTimeout(() => {
-          resultMsg.textContent = "";
-        }, 2000);
-        resetOptions();
-      }
-    }
-
-    startBtn.onclick = startGame;
-    submitGuess.onclick = submit;
-  </script></body>
+<canvas id="bgCanvas"></canvas>
+<div class="container">
+<header>
+  <div class="brand">
+    <div class="avatar">CV</div>
+    <div>
+      <h1 id="name"></h1>
+      <p class="lead" id="subtitle"></p>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn" id="themeToggle">Dark / Light</button>
+    <button class="btn" id="pdfBtn">CV PDF</button>
+  </div>
+</header>
+<main>
+<section class="card intro">
+  <h2 id="greeting"></h2>
+  <div id="typed" class="type"></div>
+  <p id="about" class="muted"></p>
+  <div class="projects" id="projects"></div>
+  <div class="actions">
+    <a class="btn" href="mailto:dorukcavdar5@gmail.com">Contact</a>
+  </div>
+</section>
+<aside class="side">
+  <div class="card">
+    <h3>CV</h3>
+    <div id="timeline"></div>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <div class="skills" id="skills"></div>
+  </div>
+  <div class="card">
+    <h4>Links</h4>
+    <a class="btn ghost" id="linkedin" target="_blank">LinkedIn</a>
+  </div>
+</aside>
+</main>
+<footer>© Doruk Çavdar</footer>
+</div>
+<div class="lang-modal" id="langModal">
+  <div class="lang-box">
+    <h3>Select Language</h3>
+    <button class="btn" onclick="setLang('en')">English</button>
+    <button class="btn" onclick="setLang('tr')">Türkçe</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const data={
+name:'Doruk Çavdar',
+email:'dorukcavdar5@gmail.com',
+linkedin:'https://www.linkedin.com/in/doruk-%C3%A7avdar-2731292ba/',
+en:{
+subtitle:'Software developer • High school student',
+headline:['Software Developer','High School Student','Tech Enthusiast'],
+about:'I discovered my passion for software development during middle school. In 2022, I was admitted to Pendik Fatih Anatolian High School with a score of 456 in LGS. I actively develop projects using Python, JavaScript, C++, and Lua, focusing on web applications, automation, and small games. I am an active member of my school Technology Club and continuously improve my technical and problem-solving skills.',
+projects:[{t:'Web Tools',d:'Utility-focused web applications.'},{t:'Mini Games',d:'Small games built with Lua and JavaScript.'}],
+skills:['Python','JavaScript','C++','Lua','HTML','CSS','Git'],
+timeline:[{y:'2022',t:'Pendik Fatih Anatolian High School',d:'Admitted with 456 LGS score.'},{y:'2020–2024',t:'Programming Journey',d:'Personal projects and club activities.'}]
+},
+tr:{
+subtitle:'Yazılım geliştirici • Lise öğrencisi',
+headline:['Yazılım Geliştirici','Lise Öğrencisi','Teknoloji Meraklısı'],
+about:'Ortaokulda başlayan yazılım ilgimle birlikte Python, JavaScript, C++ ve Lua kullanarak web uygulamaları, otomasyonlar ve küçük oyunlar geliştirdim. 2022 yılında LGS’de 456 puan alarak Pendik Fatih Anadolu Lisesi’ne yerleştim. Okul Teknoloji Kulübü’nde aktif olarak yazılım projelerinde yer alıyorum.',
+projects:[{t:'Web Araçları',d:'Kullanışlı web uygulamaları.'},{t:'Mini Oyunlar',d:'Lua ve JavaScript ile geliştirilen oyunlar.'}],
+skills:['Python','JavaScript','C++','Lua','HTML','CSS','Git'],
+timeline:[{y:'2022',t:'Pendik Fatih Anadolu Lisesi',d:'456 LGS puanı ile giriş.'},{y:'2020–2024',t:'Yazılım Yolculuğu',d:'Kişisel projeler ve kulüp çalışmaları.'}]
+}}
+let lang
+function setLang(l){lang=l;localStorage.setItem('lang',l);document.getElementById('langModal').style.display='none';render()}
+function render(){const L=data[lang];name.innerText=data.name;subtitle.innerText=L.subtitle;greeting.innerText=lang==='en'?'Hi, I\'m Doruk':'Merhaba, ben Doruk';about.innerText=L.about;linkedin.href=data.linkedin;new Typed('#typed',{strings:L.headline,typeSpeed:60,backSpeed:40,loop:true});projects.innerHTML='';L.projects.forEach(p=>projects.innerHTML+=`<div class="project"><b>${p.t}</b><div>${p.d}</div></div>`);skills.innerHTML='';L.skills.forEach(s=>skills.innerHTML+=`<div class="skill">${s}</div>`);timeline.innerHTML='';L.timeline.forEach(t=>timeline.innerHTML+=`<div class="timeline-item"><div class="badge">${t.y}</div><div><b>${t.t}</b><div>${t.d}</div></div></div>`)}
+document.getElementById('themeToggle').onclick=()=>{document.body.classList.toggle('light')}
+document.getElementById('pdfBtn').onclick=()=>{const{jsPDF}=window.jspdf;const doc=new jsPDF();doc.text(data.name,20,20);doc.text(data[lang].about,20,40,{maxWidth:170});doc.save('Doruk_Cavdar_CV.pdf')}
+lang=localStorage.getItem('lang');if(!lang){document.getElementById('langModal').style.display='flex'}else{render()}
+const c=bgCanvas,ctx=c.getContext('2d');let W,H;function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();addEventListener('resize',rs);const ps=[...Array(60)].map(()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3}));function loop(){ctx.clearRect(0,0,W,H);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.y<0)p.y=H;if(p.x>W)p.x=0;if(p.y>H)p.y=0;ctx.fillStyle='rgba(110,231,183,.08)';ctx.fillRect(p.x,p.y,2,2)});requestAnimationFrame(loop)}loop();
+</script>
+</body>
 </html>
